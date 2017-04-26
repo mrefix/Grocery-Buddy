@@ -13,4 +13,5 @@ class AllListTableViewCell : UITableViewCell {
     @IBOutlet weak var notificationImage: UIImageView!
     @IBOutlet weak var purchaseDate: UILabel!
     @IBOutlet weak var finishDate: UILabel!
+    var ID : Int = -1
 }

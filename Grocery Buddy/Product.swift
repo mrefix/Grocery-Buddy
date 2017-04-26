@@ -7,10 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 // GLOBAL:
 struct GlobalVariables {
-    static var productList : [Product] = [Product(setTitle: "first", setQuantity: Quantity(number: 3, measurement: "gallons")), Product(setTitle: "second")]
+    static var productDictionary : [Int: Product] = [001: Product(setUPC: 001, setTitle: "first", setQuantity: Quantity(number: 3, measurement: "gallons")), 002: Product(setUPC: 002, setTitle: "second")]
+    static var productKeyList : [Int] {
+        get { return [Int](productDictionary.keys) }
+    }
 }
 
 struct Quantity {
@@ -23,11 +27,13 @@ struct Quantity {
 }
     
 class Product {
+    var dateFormatter = DateFormatter()
+    
     public enum CategoryType {
         case DAIRY, SNACK, MEAT, DRINK, OTHER;
     }
     
-    init(setTitle title: String, setQuantity quantity: Quantity = Quantity(number: 1, measurement: ""), setCategory cat: CategoryType = CategoryType.OTHER, setExpDate expD: Date = Date(), setFinishDate finD: Date = Date(timeIntervalSinceNow: 100), setPurchaseDate purchaseD: Date = Date(), setAisle aisle: Int = -1) {
+    init(setUPC upc: Int, setTitle title: String, setQuantity quantity: Quantity = Quantity(number: 1, measurement: ""), setCategory cat: CategoryType = CategoryType.OTHER, setExpDate expD: Date = Date(), setFinishDate finD: Date = Date(timeIntervalSinceNow: 100), setPurchaseDate purchaseD: Date = Date(), setAisle aisle: Int = -1) {
         self.title = title
         self.quantity = quantity
         self.category = cat
@@ -35,6 +41,8 @@ class Product {
         self.finishDate = finD
         self.purchaseDate = purchaseD
         self.aisle = aisle
+        dateFormatter.dateFormat = "MM-dd-yyyy"
+        dateFormatter.locale = Locale.init(identifier: "en_US")
     }
     
     // PRIVATE FIELDS
@@ -84,6 +92,18 @@ class Product {
     var purchaseDate: Date {
         set { _purchaseDate = newValue }
         get { return _purchaseDate }
+    }
+    var expDateString: String {
+        set { _expDate = dateFormatter.date(from: newValue)! }
+        get { return dateFormatter.string(from: _expDate) }
+    }
+    var finishDateString: String {
+        set { _finishDate = dateFormatter.date(from: newValue)! }
+        get { return dateFormatter.string(from: _finishDate) }
+    }
+    var purchaseDateString: String {
+        set { _purchaseDate = dateFormatter.date(from: newValue)! }
+        get { return dateFormatter.string(from: _purchaseDate) }
     }
     var aisle: Int {
         set { _aisle = newValue }

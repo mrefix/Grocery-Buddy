@@ -14,13 +14,8 @@ class MasterViewController: UITableViewController {
     var detailViewController: DetailViewController? = nil
     var objects = [Any]()
     
-    let dateFormatter = DateFormatter()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        dateFormatter.dateFormat = "MM-dd-yyyy"
-        dateFormatter.locale = Locale.init(identifier: "en_US")
-        
         
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
@@ -76,12 +71,9 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let product = GlobalVariables.productList[indexPath.row]
+                let UPCFromRow = GlobalVariables.productKeyList[indexPath.row]
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.titleLabel.text = product.title
-                controller.purchaseDateLabel.text = dateFormatter.string(from: product.purchaseDate)
-                controller.expirationDateLabel.text = dateFormatter.string(from: product.expDate)
-                controller.isInShoppingCart = true
+                controller.UPC = UPCFromRow
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -95,18 +87,23 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return GlobalVariables.productList.count
+        return GlobalVariables.productKeyList.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! AllListTableViewCell
         let row = indexPath.row
         
-        let product = GlobalVariables.productList[row]
-        cell.title.text = product.title
-        cell.purchaseDate.text = dateFormatter.string(from: product.purchaseDate)
-        cell.notificationImage.image = #imageLiteral(resourceName: "warningYellow") // This will be determined depending on subtraction of dates
-        cell.finishDate.text = dateFormatter.string(from: product.finishDate)
+        let keyForRow = GlobalVariables.productKeyList[row]
+        if let product = GlobalVariables.productDictionary[keyForRow] {
+            cell.title.text = product.title
+            cell.purchaseDate.text = product.purchaseDateString
+            cell.notificationImage.image = #imageLiteral(resourceName: "warningYellow") // This will be determined depending on subtraction of dates
+            cell.finishDate.text = product.finishDateString
+        }
+        else {
+            cell.title.text = "Something went wrong"
+        }
         return cell
     }
 
