@@ -16,6 +16,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var purchaseDateLabel: UILabel!
     @IBOutlet weak var expirationDateLabel: UILabel!
     @IBOutlet weak var shoppingCartImage: UIImageView!
+    @IBOutlet weak var quantityLevelImage: UIImageView!
     
 
     override func viewDidLoad() {
@@ -24,13 +25,17 @@ class DetailViewController: UIViewController {
             titleLabel.text = p.title
             purchaseDateLabel.text = p.purchaseDateString
             expirationDateLabel.text = p.expDateString
-            
+            if p.isInShoppingCart {
+                shoppingCartImage.image = #imageLiteral(resourceName: "shoppingCart")
+            }
+//            if p.quantity != nil {
+//                quantityLevelImage.image = p.quantity?.getQuantityLevelImage
+//            }
         }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
     }
 }
 

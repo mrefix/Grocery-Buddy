@@ -102,6 +102,7 @@
                     <connections>
                         <outlet property="expirationDateLabel" destination="Duf-Zg-YAM" id="4zi-c5-9Kd"/>
                         <outlet property="purchaseDateLabel" destination="zAr-ci-ehu" id="vqv-6u-IRX"/>
+                        <outlet property="quantityLevelImage" destination="Rvc-t8-ALO" id="L09-2g-SdY"/>
                         <outlet property="shoppingCartImage" destination="1Cn-k9-Wpx" id="zBw-Oh-VUV"/>
                         <outlet property="titleLabel" destination="h3Q-bN-aXM" id="jqt-4M-WlZ"/>
                     </connections>
@@ -137,7 +138,7 @@
                                 <rect key="frame" x="0.0" y="22" width="375" height="41"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WCw-Qf-5nD" id="37f-cq-3Eg">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="41"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="purchaseDate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNo-Rw-YPZ">
@@ -186,15 +187,22 @@
                     <navigationItem key="navigationItem" id="Zdf-7t-Un8">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="2P7-5A-XdL">
-                            <rect key="frame" x="80.5" y="7" width="214" height="30"/>
+                            <rect key="frame" x="81" y="7" width="214" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="History"/>
                                 <segment title="Pantry"/>
                                 <segment title="Cart"/>
                             </segments>
+                            <connections>
+                                <action selector="segmentedControlActionChanged:" destination="7bK-jq-Zjz" eventType="valueChanged" id="a4t-3J-hlB"/>
+                            </connections>
                         </segmentedControl>
                     </navigationItem>
+                    <connections>
+                        <outlet property="myTable" destination="r7i-6Z-zg0" id="X7a-VS-8J5"/>
+                        <outlet property="segmentedControl" destination="2P7-5A-XdL" id="hyP-Az-iwo"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>

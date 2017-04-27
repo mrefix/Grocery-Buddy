@@ -11,6 +11,18 @@ import Firebase
 
 class MasterViewController: UITableViewController {
 
+    @IBOutlet var myTable: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    var currentTableViewList : [Int] = GlobalVariables.productKeyList
+    @IBAction func segmentedControlActionChanged(_ sender: Any) {
+        switch(segmentedControl.selectedSegmentIndex) {
+        case 0: currentTableViewList = GlobalVariables.productKeyList
+        case 1: currentTableViewList = GlobalVariables.pantryKeyList
+        case 2: currentTableViewList = GlobalVariables.shoppingCartKeyList
+        default: break;
+        }
+        myTable.reloadData()
+    }
     var detailViewController: DetailViewController? = nil
     var objects = [Any]()
     
@@ -20,7 +32,7 @@ class MasterViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: Selector("addButtonTouched()"))
         self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
             let controllers = split.viewControllers
@@ -38,32 +50,8 @@ class MasterViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func insertNewObject(_ sender: Any) {
-        
-        //1. Create the alert controller.
-        let alert = UIAlertController(title: "Some Title", message: "Enter a text", preferredStyle: .alert)
-        
-        //2. Add the text field. You can configure it however you need.
-        alert.addTextField { (textField) in
-            textField.text = "Some default text"
-        }
-        
-        // 3. Grab the value from the text field, and print it when the user clicks OK.
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
-            print("Text field: \(textField?.text)")
-        }))
-        
-        // 4. Present the alert.
-        self.present(alert, animated: true, completion: nil)
-        
-        objects.insert(NSDate(), at: 0)
-        let indexPath = IndexPath(row: 0, section: 0)
-        self.tableView.insertRows(at: [indexPath], with: .automatic)
-    }
-    
-    func printMessagesForUser() -> Void {
-        
+    func addButtonTouched(sender: UIBarButtonItem) -> Void {
+        performSegue(withIdentifier: "addProduct", sender: self)
     }
 
     // MARK: - Segues
@@ -78,6 +66,9 @@ class MasterViewController: UITableViewController {
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
+        if segue.identifier == "addProduct" {
+            
+        }
     }
 
     // MARK: - Table View
@@ -87,14 +78,14 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return GlobalVariables.productKeyList.count
+        return currentTableViewList.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! AllListTableViewCell
         let row = indexPath.row
         
-        let keyForRow = GlobalVariables.productKeyList[row]
+        let keyForRow = currentTableViewList[row]
         if let product = GlobalVariables.productDictionary[keyForRow] {
             cell.title.text = product.title
             cell.purchaseDate.text = product.purchaseDateString
